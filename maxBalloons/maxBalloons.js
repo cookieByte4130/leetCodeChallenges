@@ -22,8 +22,43 @@ Input: text = "leetcode"
 Output: 0
 */
 
-const maxBalloons = (str) => {
-  // TODO: implement
+const maxBalloons = (text) => {
+  let charSet = {};
+  const target = "balloon";
+  for (let i = 0; i < target.length; i++) {
+    const ch = target.charAt(i);
+    if (ch === -1) {
+      return 0;
+    }
+    if (!charSet[ch]) {
+      charSet[ch] = {
+        numOfTargetInstances: 1,
+        numOfTextInstances: 0
+      }
+    } else {
+      charSet[ch].numOfTargetInstances += 1;
+    }
+  }
+  for (let i = 0; i < text.length; i++) {
+    const ch = text.charAt(i);
+    if (charSet[ch]) {
+      charSet[ch].numOfTextInstances++;
+    }
+  }
+  let maxNum;
+  let chars = Object.keys(charSet);
+  for (let ch of chars) {
+    let n = Math.floor(charSet[ch].numOfTextInstances / charSet[ch].numOfTargetInstances);
+    if (n < 1) {
+      maxNum = 0;
+      return 0;
+    } else {
+      if (!maxNum || n < maxNum) {
+        maxNum = n;
+      }
+    }
+  };
+  return maxNum;
 }
 
 module.exports = maxBalloons;
